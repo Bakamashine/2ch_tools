@@ -2,8 +2,9 @@ import os
 from file_downloader import download_file
 from urllib.parse import urlparse
 
-def get_header_html() -> str:    
-  return  """<!DOCTYPE html>
+
+def get_header_html() -> str:
+    return """<!DOCTYPE html>
   <html lang="ru">
   <head>
     <meta charset="UTF-8">
@@ -346,9 +347,8 @@ def get_header_html() -> str:
   </head>"""
 
 
-
-def get_body_header_html()->str:
-   return """
+def get_body_header_html() -> str:
+    return """
 <body>
  <header class="board-header">
     <h1>/b/</h1>
@@ -356,8 +356,9 @@ def get_body_header_html()->str:
   </header>
 """
 
+
 def get_body_main_html(thread, info_thr_json, info_thr_timestamps) -> str:
-  return f"""
+    return f"""
   <main class="thread">
   <div class="thread-info">
         Тред №{thread} &middot; {info_thr_json["thread"]["posts"]} постов &middot;  создан {info_thr_timestamps}
@@ -366,8 +367,8 @@ def get_body_main_html(thread, info_thr_json, info_thr_timestamps) -> str:
   """
 
 
-def get_end_html()->str:
-    return  """
+def get_end_html() -> str:
+    return """
 </main>
 </body>
 <script>
@@ -465,7 +466,9 @@ def get_end_html()->str:
 </html>
 """
 
-op_html = """
+
+def get_op_html() -> str:
+    return """
  <article class="post op" id="337358784">
       <div class="post-header">
         <span class="post-name">Аноним</span>
@@ -496,7 +499,6 @@ op_html = """
     """
 
 
-
 def generate_post(
     op,
     num,
@@ -504,8 +506,10 @@ def generate_post(
     date,
     comment,
     files: list | None,
-    thread, src_dir, thumb_dir, default_url, 
-
+    thread,
+    src_dir,
+    thumb_dir,
+    default_url,
 ) -> str:
     badges = ""
     if op:
@@ -564,8 +568,21 @@ def generate_post(
     return header_post_html + body_post_html + end_post_html
 
 
-def get_result_html(thread, src_dir, thumb_dir, posts, default_url, info_thr_json, info_thr_timestamps, is_op) -> str|None:
-    result_html = get_header_html() + get_body_header_html() + get_body_main_html(thread, info_thr_json, info_thr_timestamps)
+def get_result_html(
+    thread,
+    src_dir,
+    thumb_dir,
+    posts,
+    default_url,
+    info_thr_json,
+    info_thr_timestamps,
+    is_op,
+) -> str | None:
+    result_html = (
+        get_header_html()
+        + get_body_header_html()
+        + get_body_main_html(thread, info_thr_json, info_thr_timestamps)
+    )
     for post in posts:
         is_op = post["num"] == int(thread)
         result_html += generate_post(
@@ -578,7 +595,8 @@ def get_result_html(thread, src_dir, thumb_dir, posts, default_url, info_thr_jso
             thread=thread,
             src_dir=src_dir,
             thumb_dir=thumb_dir,
-            default_url=default_url
+            default_url=default_url,
         )
 
     result_html += get_end_html()
+    return result_html
